@@ -10,7 +10,7 @@ class Ticket(models.Model):
         ('Closed', 'Завершен'),
         ('Freeze', 'Заморожен'),
     )
-    status = models.CharField(verbose_name='Статус тикета', choices=STATUS_TYPE, max_length=30)
+    status = models.CharField(verbose_name='Статус тикета', choices=STATUS_TYPE, max_length=30, default='Open')
     user = models.ForeignKey(USER, verbose_name='user', on_delete=models.CASCADE)
     
     class Meta:
@@ -22,7 +22,7 @@ class Ticket(models.Model):
 
 class Message(models.Model):
     text = models.TextField(verbose_name='Текст сообщения')
-    ticket = models.ForeignKey(Ticket, on_delete=models.DO_NOTHING)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     
     class Meta:
