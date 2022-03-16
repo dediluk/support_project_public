@@ -1,6 +1,8 @@
 рассмореть возможность отвечать на сообщения из django movie
+к закрытому тикету нельзя писать сообщения
 jwt registration посмотреть реализацию
 PostgreSQL
 PyTest
 Celery
 Redis drf redis
+

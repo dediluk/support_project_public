@@ -1,8 +1,9 @@
+from urllib import request
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from tickets.permissions import IsOwnerOfTicketForMessagePermission, IsOwnerOfTicketPermission
+from tickets.permissions import IsOwnerOfTicketForMessagePermission, IsOwnerOfTicketPermission, IsTicketClosedPermission
 from tickets import serializers
 from tickets.serializers import *
 from tickets.models import Ticket, Message
@@ -47,15 +48,17 @@ class TicketListView(generics.ListAPIView):
     
 class MessageCreateView(generics.CreateAPIView):
     serializer_class = MessageDetailsSerializer
-    permission_classes = (IsOwnerOfTicketForMessagePermission,)
+    permission_classes = (IsAdminUser|IsOwnerOfTicketForMessagePermission, IsTicketClosedPermission)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        ticket = Ticket.objects.get(pk=self.kwargs['pk'])
+        serializer.save(user=self.request.user, ticket=ticket)
+
     
 
 class MessageListByTicketListView(generics.ListAPIView):
     serializer_class = MessageListByTicketSerializer
-    permission_classes = (IsAdminUser|IsOwnerOfTicketForMessagePermission,)
+    permission_classes = (IsAdminUser|IsOwnerOfTicketForMessagePermission, )
     
     def get_queryset(self):
         queryset = Message.objects.filter(ticket=self.kwargs['pk'])

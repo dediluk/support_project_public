@@ -1,3 +1,4 @@
+from email.policy import default
 from tickets.models import Ticket, Message
 from rest_framework import serializers
 
@@ -25,10 +26,10 @@ class TicketListSerializer(serializers.ModelSerializer):
       
 class MessageDetailsSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
-    
+
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ('text', 'user')
      
         
 class MessageListByTicketSerializer(serializers.ModelSerializer):
