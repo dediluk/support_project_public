@@ -10,26 +10,28 @@ class TicketDetailsForUserSerializer(serializers.ModelSerializer):
 
 
 class TicketDetailsForStaffSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
     class Meta:
         model = Ticket
         fields = ('title', 'status', 'user')
         
 
 class TicketListSerializer(serializers.ModelSerializer):
-    # print(serializers.CurrentUserDefault())
-
 
     class Meta:
         model = Ticket
-        fields = ('id', 'title', 'user', "status",)
-        
+        fields = ('id', 'title', 'user', "status",)        
+     
       
 class MessageDetailsSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    
     class Meta:
         model = Message
         fields = '__all__'
+     
         
-class MessageByTicketSerializer(serializers.ModelSerializer):
+class MessageListByTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'

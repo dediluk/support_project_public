@@ -24,7 +24,9 @@ class Message(models.Model):
     text = models.TextField(verbose_name='Текст сообщения')
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
-    
+    user = models.ForeignKey(USER, verbose_name='user', on_delete=models.CASCADE)
+
+        
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
