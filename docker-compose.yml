@@ -1,7 +1,7 @@
-version: '3.10'
+version: '3'
 services:
-   web:
+   support_project:
        build: .
-       command: python manage.py runserver 127.0.0.1:8080
+       command: python manage.py runserver 0.0.0.0:8000
        ports:
-           - 8080:8080
+           - "8000:8000"
