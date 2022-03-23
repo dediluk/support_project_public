@@ -1,0 +1,7 @@
+version: '3.10'
+services:
+   web:
+       build: .
+       command: python manage.py runserver 127.0.0.1:8080
+       ports:
+           - 8080:8080
