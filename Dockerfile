@@ -1,15 +1,15 @@
-FROM python
+FROM python:3.9.5-slim
 
-ENV PYTHONDONTWRITTENBYTECODE 1
-ENV PYTHONNUNBUFFERED 1
+# ENV PYTHONDONTWRITTEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app
+RUN mkdir /code
+WORKDIR /code
 
-COPY . .
+COPY requirements.txt /code
+RUN pip install --user -r requirements.txt
 
-RUN pip install -r requirements.txt
-
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+COPY . /code/
+CMD python manage.py runserver 0.0.0.0:8000 
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
