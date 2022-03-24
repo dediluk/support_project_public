@@ -39,7 +39,6 @@ class TicketListView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        print(self.request.user.id == None)
         if self.request.user.is_staff:
             return Ticket.objects.all()
         else:

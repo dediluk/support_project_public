@@ -12,6 +12,7 @@ djangorestframework==3.13.1
 djangorestframework-simplejwt==5.1.0
 kombu==5.2.4
 prompt-toolkit==3.0.28
+psycopg2==2.9.3
 PyJWT==2.3.0
 pytz==2021.3
 six==1.16.0
