@@ -4,5 +4,11 @@ PyTest
 Celery
 Redis drf redis
 
+
+
+
+
+permissions во viewset
+
 +к закрытому тикету нельзя писать сообщения
 

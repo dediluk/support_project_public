@@ -10,46 +10,60 @@ from tickets.serializers import *
 from tickets.models import Ticket, Message
 
 
-class TicketViewSet(viewsets.ViewSet):
+class TicketViewSet(viewsets.ModelViewSet):
+    serializer_class = TicketListSerializer
+    queryset = Ticket.objects.all()
     
-    def list(self, request):
-        if request.user.is_staff:
-            queryset = Ticket.objects.all().only('id', 'title', 'user', "status",)
-        else:
-            queryset = Ticket.objects.filter(user=request.user)
-        print()
-        serializer_class = TicketListSerializer
-        serializer = serializer_class(queryset, many=True)
-        return Response(serializer.data)
+    # def list(self, request):
+    #     if request.user.is_staff:
+    #         queryset = Ticket.objects.all().only('id', 'title', 'user', "status",)
+    #     else:
+    #         queryset = Ticket.objects.filter(user=request.user)
+    #     print()
+    #     serializer_class = TicketListSerializer
+    #     serializer = serializer_class(queryset, many=True)
+    #     return Response(serializer.data)
     
 
-    @action(detail=True, methods=['get'], permission_classes = [IsOwnerOfTicketPermission,], url_path='details')
-    def retrive(self, request, pk=None):
-        queryset = Ticket.objects.all()
-        ticket = get_object_or_404(queryset, pk=pk)
-        serializer = TicketDetailsForUserSerializer(ticket)
-        return Response(serializer.data)
+    # @action(detail=True, methods=['get'], permission_classes = [IsOwnerOfTicketPermission,], url_path='details')
+    # def retrive(self, request, pk=None):
+    #     queryset = Ticket.objects.all()
+    #     ticket = get_object_or_404(queryset, pk=pk)
+    #     print('hi')
+    #     serializer = TicketDetailsForUserSerializer(ticket)
+    #     return Response(serializer.data)
     
     def get_serializer_class(self):
         print('тут берется сериалайзер', self.action)
         if self.action == 'list':
             return TicketListSerializer
+        elif self.action == 'update':
+            if self.request.user.is_staff:
+                return TicketDetailsForStaffSerializer
+            else:
+                return TicketDetailsForUserSerializer
         elif self.action == 'retrive':
             return TicketDetailsForUserSerializer
         return super().get_serializer_class()
     
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)  
     
-    # def get_permissions(self):
-    #     """
-    #     Instantiates and returns the list of permissions that this view requires.
-    #     """
-    #     if self.action == 'list':
-    #         print('perm of list')
-    #         permission_classes = [IsAuthenticated,]
-    #     else:
-    #         print('perm of else')
-    #         permission_classes = [IsAdminUser|IsOwnerOfTicketPermission]
-    #     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        print(self.action)
+        if self.action == 'list':
+            print('perm of list')
+            permission_classes = [IsAuthenticated,]
+        elif self.action == 'update':
+            permission_classes = [IsOwnerOfTicketPermission,]
+        #     permission_classes = [IsAuthenticated,]
+        else:
+            print('perm of else')
+            permission_classes = [IsAuthenticated, IsOwnerOfTicketPermission]
+        return [permission() for permission in permission_classes]
 
 # class TicketDetailsView(generics.RetrieveAPIView):
 #     serializer_class = TicketDetailsForUserSerializer
