@@ -6,9 +6,11 @@ from rest_framework import serializers
 class TicketDetailsForUserSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
     status = serializers.CharField(source='get_status_display', read_only=True)
+    title = serializers.CharField(read_only=True)
     class Meta:
         model = Ticket
-        fields = ('title', 'status', 'user')
+        # fields = ('title', 'status', 'user')
+        fields = ('id', 'title','user', 'status',)
 
 
 class TicketDetailsForStaffSerializer(serializers.ModelSerializer):

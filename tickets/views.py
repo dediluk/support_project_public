@@ -42,6 +42,9 @@ class TicketViewSet(viewsets.ModelViewSet):
                 return TicketDetailsForStaffSerializer
             else:
                 return TicketDetailsForUserSerializer
+        elif self.action == 'destroy':
+            print('in destr')
+            return TicketDetailsForUserSerializer
         elif self.action == 'retrive':
             return TicketDetailsForUserSerializer
         return super().get_serializer_class()
@@ -50,23 +53,25 @@ class TicketViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)  
     
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        print(self.action)
+    #     print(self.action)
         if self.action == 'list':
             print('perm of list')
             permission_classes = [IsAuthenticated,]
-        elif self.action == 'update':
-            permission_classes = [IsOwnerOfTicketPermission,]
-        elif self.action == 'create':
-            permission_classes = [IsAuthenticated,]
-        elif self.action == 'destroy':
-            permission_classes = [IsOwnerOfTicketPermission,]
+        elif self.action == 'update' or self.action == 'partial_update' or self.action == 'retrieve':
+            permission_classes = [IsAdminUser|IsOwnerOfTicketPermission,]
         else:
             print('perm of else')
             permission_classes = [IsAuthenticated,]
         return [permission() for permission in permission_classes]
+
+    #     elif self.action == 'create':
+    #         permission_classes = [IsAuthenticated,]
+    #     elif self.action == 'destroy':
+    #         permission_classes = [IsOwnerOfTicketPermission,]
+    #     else:
+    #         print('perm of else')
+    #         permission_classes = [IsAuthenticated,]
+        
 
 # class TicketDetailsView(generics.RetrieveAPIView):
 #     serializer_class = TicketDetailsForUserSerializer
