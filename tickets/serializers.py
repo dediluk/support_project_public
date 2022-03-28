@@ -18,7 +18,7 @@ class TicketDetailsForStaffSerializer(serializers.ModelSerializer):
         
 
 class TicketListSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
         model = Ticket
         fields = ('id', 'title', 'user', "status",)        
