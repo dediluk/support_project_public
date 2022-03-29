@@ -30,7 +30,8 @@ class TicketListSerializer(serializers.ModelSerializer):
       
 class MessageDetailsSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
-
+    # ticket = serializers.Fo(slug_field='ticket', read_only=True)
+    
     class Meta:
         model = Message
         fields = ('text', 'user')

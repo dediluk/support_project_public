@@ -12,14 +12,13 @@ from tickets.models import Ticket, Message
 
 class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketListSerializer
-    queryset = Ticket.objects.all()
+    queryset = Ticket.objects.all().order_by('-id')
     
     def list(self, request):
         if request.user.is_staff:
-            queryset = Ticket.objects.all().only('id', 'title', 'user', "status",)
+            queryset = Ticket.objects.all().only('id', 'title', 'user', "status",).order_by('-id')
         else:
-            queryset = Ticket.objects.filter(user=request.user)
-        print()
+            queryset = Ticket.objects.filter(user=request.user).order_by('-id')
         serializer_class = TicketListSerializer
         serializer = serializer_class(queryset, many=True)
         return Response(serializer.data)
@@ -64,14 +63,33 @@ class TicketViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated,]
         return [permission() for permission in permission_classes]
 
-    #     elif self.action == 'create':
-    #         permission_classes = [IsAuthenticated,]
-    #     elif self.action == 'destroy':
-    #         permission_classes = [IsOwnerOfTicketPermission,]
-    #     else:
-    #         print('perm of else')
-    #         permission_classes = [IsAuthenticated,]
+
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class = MessageDetailsSerializer
+    queryset = Message.objects.all()
+    
+    def list(self, request, pk1):
+        queryset = Message.objects.filter(ticket=Ticket.objects.get(id=pk1))
+        serializer_class = MessageDetailsSerializer
+        print(serializer_class)
+        serializer = serializer_class(queryset, many=True)
+        return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user, ticket=Ticket.objects.get(id=self.kwargs['pk1'])) 
         
+    def get_permissions(self):
+        print(self.action)
+        if self.action == 'list':
+            permission_classes = [IsAdminUser|IsOwnerOfTicketForMessagePermission]
+        elif self.action == 'create':
+            permission_classes = [IsAdminUser|IsOwnerOfTicketForMessagePermission]
+        elif self.action == 'update' or self.action == 'partial_update' or self.action == 'retrieve':
+            permission_classes = [IsOwnerOfTicketForMessagePermission,]
+        else:
+            print('perm of else')
+            permission_classes = [IsAuthenticated,]
+        return [permission() for permission in permission_classes]
 
 # class TicketDetailsView(generics.RetrieveAPIView):
 #     serializer_class = TicketDetailsForUserSerializer

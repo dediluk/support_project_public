@@ -7,7 +7,7 @@ class IsOwnerOfTicketPermission(BasePermission):
     
 class IsOwnerOfTicketForMessagePermission(BasePermission):
     def has_permission(self, request, view):
-        return Ticket.objects.get(pk=view.kwargs['pk']).user == request.user
+        return Ticket.objects.get(pk=view.kwargs['pk1']).user == request.user
 
 
 class IsTicketClosedPermission(BaseException):
