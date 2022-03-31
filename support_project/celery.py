@@ -12,9 +12,10 @@ app.conf.update(timezone='Europe/Moscow')
 
 app.config_from_object(settings, namespace='CELERY')
 
-#Celery Beat Settings
+# Celery Beat Settings
 
 app.autodiscover_tasks()
+
 
 @app.task(bind=True)
 def debug_task(self):

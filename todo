@@ -5,10 +5,10 @@ Celery
 Redis drf redis
 
 
+изменить правила flake8 (длина строки 120)
 
 
-
-permissions во viewset
++permissions во viewset
 
 +к закрытому тикету нельзя писать сообщения
 
