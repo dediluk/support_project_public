@@ -53,7 +53,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageDetailsSerializer
     queryset = Message.objects.all()
 
-    def list(self, request, pk1):
+    def list(self, request, pk1: int):
         queryset = Message.objects.filter(ticket=Ticket.objects.get(id=pk1)).order_by('date')
         serializer_class = MessageDetailsSerializer
         serializer = serializer_class(queryset, many=True)
