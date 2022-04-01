@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='status',
-            field=models.IntegerField(choices=[(1, 'Незавершен'), (2, 'Завершен'), (3, 'Заморожен')], verbose_name='Статус тикета'),
+            field=models.IntegerField(choices=[(1, 'Незавершен'), (2, 'Завершен'),
+                                               (3, 'Заморожен')], verbose_name='Статус тикета'),
         ),
         migrations.AlterField(
             model_name='ticket',

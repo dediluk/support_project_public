@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializers import RegisterSerializer, UserSerializer
+
+from account.serializers import RegisterSerializer, UserSerializer
 
 
 class RegisterApi(generics.GenericAPIView):

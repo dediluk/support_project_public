@@ -12,21 +12,21 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 # from email.mime import application
 # import json
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_path = os.path.join(os.path.abspath(os.path.dirname(__name__)), '.env')
+load_dotenv(dotenv_path)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)$8=_@6g3#_kqi@ebxwa+lnz@\
-            )xlu0!2-(7f0ct&vgd51ly$2p'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -108,15 +108,15 @@ WSGI_APPLICATION = 'support_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'support_db',
+        'NAME': os.environ.get("DB_NAME"),
 
-        'USER': 'postgres',
+        'USER': os.environ.get("DB_USER"),
 
-        'PASSWORD': '123456',
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
 
-        'HOST': 'localhost',
+        'HOST': os.environ.get("DB_HOST"),
 
-        'PORT': '5432',
+        'PORT': os.environ.get("DB_PORT"),
     }
 }
 
@@ -125,12 +125,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -164,7 +162,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-#CELERY SETTINGS
+# CELERY SETTINGS
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']

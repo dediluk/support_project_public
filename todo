@@ -5,7 +5,7 @@ Celery
 Redis drf redis
 
 
-изменить правила flake8 (длина строки 120)
++изменить правила flake8 (длина строки 120)
 
 
 +permissions во viewset
