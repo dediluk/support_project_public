@@ -3,5 +3,5 @@ from django.urls import path
 from account.api import RegisterApi
 
 urlpatterns = [
-      path('register', RegisterApi.as_view()),
+      path('register', RegisterApi.as_view(), name='user_registation'),
 ]

@@ -16,6 +16,7 @@ class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all().order_by('-id')
 
     def list(self, request):
+        queryset = Ticket.objects.all()
         if request.user.is_staff:
             queryset = Ticket.objects.all().only('id', 'title', 'user', "status",).order_by('-id')
         else:
