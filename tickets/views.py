@@ -29,10 +29,7 @@ class TicketViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return TicketListSerializer
         elif self.action == 'update':
-            if self.request.user.is_staff:
-                return TicketDetailsForStaffSerializer
-            else:
-                return TicketDetailsForUserSerializer
+            return TicketDetailsForStaffSerializer if self.request.user.is_staff else TicketDetailsForUserSerializer
         elif self.action == 'destroy':
             return TicketDetailsForUserSerializer
         elif self.action == 'retrive':
